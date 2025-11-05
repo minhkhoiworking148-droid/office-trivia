@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Office Trivia Challenge</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h1 { text-align: center; }
+    .question { margin-top: 20px; }
+    .options button { display: block; margin: 5px 0; padding: 10px; width: 100%; }
+    #score { font-weight: bold; }
+    #timer { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h1>Office Trivia Challenge</h1>
+<div id="quiz-container">
+  <div id="question-container">
+    <p id="question"></p>
+    <div class="options">
+      <button onclick="checkAnswer(0)"></button>
+      <button onclick="checkAnswer(1)"></button>
+      <button onclick="checkAnswer(2)"></button>
+      <button onclick="checkAnswer(3)"></button>
+    </div>
+  </div>
+  <p>Time left: <span id="timer">15</span> seconds</p>
+  <p>Score: <span id="score">0</span></p>
+</div>
+
+<script>
+const questions = [
+  {q:"Which of the following is an example of workplace compliance?", options:["Ignoring safety rules","Following company policies","Skipping mandatory training","Avoiding meetings"], answer:1},
+  {q:"What should you do if you notice a coworker violating company rules?", options:["Ignore it","Report to HR","Post on social media","Punish them yourself"], answer:1},
+  {q:"Employee onboarding is important because:", options:["It introduces new hires to company culture","It replaces training","It delays work","It’s optional"], answer:0},
+  {q:"Which of these promotes teamwork?", options:["Hoarding information","Open communication","Competing secretly","Ignoring feedback"], answer:1},
+  {q:"What is a “soft skill”?", options:["Communication","Coding","Excel formulas","Hardware repair"], answer:0},
+  {q:"Which is a key marketing metric?", options:["Revenue","Click-through rate (CTR)","Employee age","Number of chairs"], answer:1},
+  {q:"Social media campaigns help companies:", options:["Reach potential customers","Reduce employee training","Fix hardware issues","Fire staff"], answer:0},
+  {q:"Customer engagement means:", options:["Ignoring feedback","Responding to inquiries and interacting","Spamming emails","Blocking customers"], answer:1},
+  {q:"A/B testing in marketing is used to:", options:["Test which strategy works better","Test employee knowledge","Test office layout","Test salary levels"], answer:0},
+  {q:"Which is an example of good sales practice?", options:["Listening to customer needs","Pressuring customers unfairly","Ignoring objections","Giving wrong information"], answer:0},
+];
+
+let current = 0;
+let score = 0;
+let timeLeft = 15;
+let timerId;
+
+function showQuestion() {
+  if(current >= questions.length){
+    document.getElementById('quiz-container').innerHTML = `<h2>Game Over!</h2><p>Your Score: ${score}</p>`;
+    return;
+  }
+  const q = questions[current];
+  document.getElementById('question').innerText = q.q;
+  const buttons = document.querySelectorAll('.options button');
+  buttons.forEach((btn,i)=>btn.innerText = q.options[i]);
+  timeLeft = 15;
+  document.getElementById('timer').innerText = timeLeft;
+  clearInterval(timerId);
+  timerId = setInterval(()=>{
+    timeLeft--;
+    document.getElementById('timer').innerText = timeLeft;
+    if(timeLeft<=0){
+      clearInterval(timerId);
+      current++;
+      showQuestion();
+    }
+  },1000);
+}
+
+function checkAnswer(index){
+  const correct = questions[current].answer;
+  if(index===correct) score+=10;
+  document.getElementById('score').innerText = score;
+  current++;
+  showQuestion();
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
